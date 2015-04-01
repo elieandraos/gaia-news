@@ -1,0 +1,22 @@
+{
+    "name": "eandraos/gaia-news",
+    "description": "News admin module for the Gaia CMS project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Elie Andraos",
+            "email": "elie@andraos.org",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["laravel 5", "gaia project", "backend news", "cms"],
+    "minimum-stability": "stable",
+    "require": {
+        "eandraos/gaia-ui": "1.1.x",
+    },
+    "autoload": {
+        "psr-0": {
+            "Gaia\\News": "src/"
+        }
+    }
+}

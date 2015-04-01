@@ -10,10 +10,10 @@ composer require eandraos/gaia-news
 
 Then register this service provider with Laravel in config/app.php
 ```
-Gaia\Ui\GaiaNewsServiceProvider
+Gaia\News\GaiaNewsServiceProvider
 ```
 
-Publish the assets and the master page view
+Publish the different files
 ```
 php artisan vendor:publish
 ```
@@ -27,4 +27,10 @@ Add PSR-4 autoload in the composer.json
 Dump the class autoload in the terminal 
 ```
 composer dump-autoload -o
+```
+
+Create the tables and seeds
+```
+php artisan migrate
+php artisan db:seed
 ```
