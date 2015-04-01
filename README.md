@@ -32,5 +32,5 @@ composer dump-autoload -o
 Create the tables and seeds
 ```
 php artisan migrate
-php artisan db:seed
+php artisan db:seed --class=NewsTableSeeder
 ```

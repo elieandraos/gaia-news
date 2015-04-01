@@ -27,6 +27,12 @@ class GaiaNewsServiceProvider extends ServiceProvider
         $this->publishes([ __DIR__ .'/../../Models' => base_path('app/Models/') ]);
         //publish PSR-4 Gaia folder
         $this->publishes([ __DIR__ .'/../../PSR4' => base_path('app/') ]);
+        //publish the controllers
+        $this->publishes([ __DIR__ .'/../../Contollers' => base_path('app/Http/Controllers/') ]);
+        //publish the requests
+        $this->publishes([ __DIR__ .'/../../Requests' => base_path('app/Http/Requests/') ]);
+        //include the routes
+        include __DIR__.'/../../routes.php';
     }
 
 
