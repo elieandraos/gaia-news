@@ -1,4 +1,4 @@
-<?php namespace App\Http\Requests\Admin;
+<?php namespace Gaia\News;
 
 use App\Http\Requests\Request;
 

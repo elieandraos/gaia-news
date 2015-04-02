@@ -1,6 +1,12 @@
 ## gaia-news package
-News admin module for the Gaia CMS project
+News admin module for the Gaia CMS project. 
+The package will publish the following:
+* views
+* repositories (PSR4 autoloaded and binded)
+* migrations and seeds (in database folder)
+* models
 
+The controller, (validation) request and the routes will be autoloaded from the package itself.
 
 #### Installation
 Run the following command in your terminal 
