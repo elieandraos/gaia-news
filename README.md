@@ -2,7 +2,7 @@
 News admin module for the Gaia CMS project. 
 The package will publish the following:
 * views
-* repositories (PSR4 autoloaded and binded)
+* model repositories and services (PSR4 autoloaded and binded)
 * migrations and seeds (in database folder)
 * models
 
