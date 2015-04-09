@@ -50,9 +50,13 @@
             </div>
         </div>
         <div class="form-group">
-			{!! Form::label('image', 'Image', ['class' => 'col-sm-3 control-label']) !!}
+            {!! Form::label('image', 'Image', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
-                {!! Form::text('image', null, ['class' => 'form-control']) !!}
+               {!! Form::file('image','',array('id'=>'image','class'=>'form-control')) !!}
+                @if(isset($news) && $news->image)
+                    <div class="image-preview"><img src="{{ asset($news->getThumbUrl('xs')) }}" /></div>
+                    <div class="image-removal">{!! Form::checkbox('remove_image', $news->id, null) !!} remove existing image</div>
+                @endif
             </div>
         </div>
 	</div>

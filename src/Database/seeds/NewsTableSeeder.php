@@ -13,11 +13,12 @@ class NewsTableSeeder extends Seeder {
 	 * @return type
 	 */
 	public function run()
-	{		
+	{	
+		$this->cleanUp();
 		$faker = Faker::create();
 		$dates = [ Carbon::now(), Carbon::now()->addDays(4), Carbon::now()->subWeeks(1), Carbon::now()->tomorrow(), Carbon::now()->yesterday(), Carbon::now()->subDays(3) ];
 		
-		for($i=0;$i<30;$i++)
+		for($i=0;$i<15;$i++)
 		{
 			$title = $faker->sentence();
 			$index = array_rand($dates);
