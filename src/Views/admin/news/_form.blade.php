@@ -63,6 +63,10 @@
 </div>
 <!-- Panel end -->
 
+
+@include('admin.seo._form')
+
+
 <div class="row">
     <div class="col-sm-1  col-sm-push-5">
         <a href="{{ route('admin.news.list') }}">

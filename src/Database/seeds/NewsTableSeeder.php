@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 
 use App\Models\News;
+use App\Models\Seo;
 use Carbon\Carbon;
 
 class NewsTableSeeder extends Seeder {
@@ -24,13 +25,16 @@ class NewsTableSeeder extends Seeder {
 			$index = array_rand($dates);
 			$published_at = $dates[$index];
 			
-			News::create([
+			$news = News::create([
 				'title' => $title,
 				'excerpt' => $faker->paragraph(3),
 				'description' => $faker->text(450),
 				'slug' => str_slug($title, '-'),
 				'published_at' => $published_at
 			]);
+			
+			$seo = new Seo;
+			$news->seo()->save($seo);
 		}
 	}
 

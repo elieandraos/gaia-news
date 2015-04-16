@@ -12,7 +12,8 @@
     "keywords": ["laravel 5", "gaia project", "backend news", "cms"],
     "minimum-stability": "stable",
     "require": {
-        "eandraos/gaia-ui": "1.1.x"
+        "eandraos/gaia-ui": "1.1.x",
+        "eandraos/gaia-seo": "1.0.x"
     },
     "autoload": {
         "psr-0": {

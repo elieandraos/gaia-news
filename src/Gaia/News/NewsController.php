@@ -7,6 +7,7 @@ use Gaia\News\NewsRequest;
 use Gaia\Repositories\NewsRepositoryInterface;
 use Gaia\Services\NewsService;
 use App\Models\News;
+use App\Models\Seo;
 use Redirect;
 
 
@@ -45,7 +46,8 @@ class NewsController extends Controller {
 	 */
 	public function create()
 	{
-		return view('admin.news.create');
+		$seo = new Seo;
+		return view('admin.news.create', ['seo' => $seo]);
 	}
 
 
@@ -57,8 +59,16 @@ class NewsController extends Controller {
 	public function store(NewsRequest $request)
 	{
 		$input = $request->all();
+		//create the news
 		$news = $this->newsRepos->create($input); 
-		$this->newsService->uploadImage($news, $input['image']);
+		//upload the image via service
+		if(isset($input['image']))
+			$this->newsService->uploadImage($news, $input['image']);
+		//add seo polymorphic model
+		$seo = new Seo;
+		$seo->updateFromInput($input);
+		$news->seo()->save($seo);
+
 		return Redirect::route('admin.news.list');
 	}
 
@@ -71,7 +81,8 @@ class NewsController extends Controller {
 	 */
 	public function edit(News $news)
 	{
-		return view('admin.news.edit', ["news" => $news]);
+		// ($news->seo) : $seo = $news->seo
+		return view('admin.news.edit', ["news" => $news, "seo" => $news->seo]);
 	}
 
 
@@ -96,6 +107,8 @@ class NewsController extends Controller {
 		//upload new picture if any 
 		if(isset($input['image']))
 			$this->newsService->uploadImage($news, $input['image']);
+
+		$news->seo->updateFromInput($input);
 
 		return Redirect::route('admin.news.list');
 	}

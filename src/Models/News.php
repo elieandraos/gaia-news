@@ -11,6 +11,16 @@ class News extends Model {
 
 	
 	/**
+	 * Morphing to Seo Model
+	 * @return type
+	 */
+	public function seo()
+	{
+	    return $this->morphOne('App\Models\Seo', 'seoable');
+	}
+
+
+	/**
 	 * published_at mutator: parse the date before saving the model 
 	 * @param type $date 
 	 * @return type
