@@ -9,11 +9,13 @@ use Gaia\Services\NewsService;
 use App\Models\News;
 use App\Models\Seo;
 use Redirect;
+use Auth;
+use App;
 
 
 class NewsController extends Controller {
 
-	protected $newsRepos, $newsService;
+	protected $newsRepos, $newsService, $authUser;
 
 
 	/**
@@ -24,6 +26,7 @@ class NewsController extends Controller {
 	{
 		$this->newsRepos   = $newsReposInterface;
 		$this->newsService = $newsService;
+		$this->authUser = Auth::user();
 	}
 
 
@@ -34,6 +37,9 @@ class NewsController extends Controller {
 	 */
 	public function index()
 	{
+		if(!$this->authUser->can('list-news'))
+			App::abort(403, 'Access denied');
+
 		$news = $this->newsRepos->getAll();
 		return view('admin.news.index', ["news" => $news]);
 	}
@@ -46,6 +52,9 @@ class NewsController extends Controller {
 	 */
 	public function create()
 	{
+		if(!$this->authUser->can('create-edit-news'))
+			App::abort(403, 'Access denied');
+
 		$seo = new Seo;
 		return view('admin.news.create', ['seo' => $seo]);
 	}
@@ -58,6 +67,9 @@ class NewsController extends Controller {
 	 */
 	public function store(NewsRequest $request)
 	{
+		if(!$this->authUser->can('create-edit-news'))
+			App::abort(403, 'Access denied');
+
 		$input = $request->all();
 		//create the news
 		$news = $this->newsRepos->create($input); 
@@ -81,7 +93,9 @@ class NewsController extends Controller {
 	 */
 	public function edit(News $news)
 	{
-		// ($news->seo) : $seo = $news->seo
+		if(!$this->authUser->can('create-edit-news'))
+			App::abort(403, 'Access denied');
+
 		return view('admin.news.edit', ["news" => $news, "seo" => $news->seo]);
 	}
 
@@ -94,6 +108,9 @@ class NewsController extends Controller {
 	 */
 	public function update(News $news, NewsRequest $request)
 	{
+		if(!$this->authUser->can('create-edit-news'))
+			App::abort(403, 'Access denied');
+
 		$input = $request->all();
 		
 		//reset the input image
@@ -122,6 +139,9 @@ class NewsController extends Controller {
 	 */
 	public function destroy(News $news)
 	{
+		if(!$this->authUser->can('delete-news'))
+			App::abort(403, 'Access denied');
+
 		$this->newsService->removeImage($news);
 		$this->newsRepos->delete($news->id);
 	}
