@@ -38,7 +38,7 @@ class NewsController extends Controller {
 	 */
 	public function index()
 	{
-		if(!$this->authUser->can('list-news'))
+		if(!$this->authUser->can('list-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
 		$news = $this->newsRepos->getAll();
@@ -53,7 +53,7 @@ class NewsController extends Controller {
 	 */
 	public function create()
 	{
-		if(!$this->authUser->can('create-edit-news'))
+		if(!$this->authUser->can('create-edit-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
 		$seo = new Seo;
@@ -68,7 +68,7 @@ class NewsController extends Controller {
 	 */
 	public function store(NewsRequest $request)
 	{
-		if(!$this->authUser->can('create-edit-news'))
+		if(!$this->authUser->can('create-edit-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
 		$input = $request->all();
@@ -97,7 +97,7 @@ class NewsController extends Controller {
 	 */
 	public function edit(News $news)
 	{
-		if(!$this->authUser->can('create-edit-news'))
+		if(!$this->authUser->can('create-edit-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
 		//get the small preview thumb if image is uploaded
@@ -116,7 +116,7 @@ class NewsController extends Controller {
 	 */
 	public function update(News $news, NewsRequest $request)
 	{
-		if(!$this->authUser->can('create-edit-news'))
+		if(!$this->authUser->can('create-edit-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
 		$input = $request->all();
@@ -150,7 +150,7 @@ class NewsController extends Controller {
 	 */
 	public function destroy(News $news)
 	{
-		if(!$this->authUser->can('delete-news'))
+		if(!$this->authUser->can('delete-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
 		$this->newsRepos->delete($news->id);
