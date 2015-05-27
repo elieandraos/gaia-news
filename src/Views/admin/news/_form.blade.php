@@ -53,8 +53,8 @@
             {!! Form::label('image', 'Image', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
                {!! Form::file('image','',array('id'=>'image','class'=>'form-control')) !!}
-                @if(isset($news) && $news->image)
-                    <div class="image-preview"><img src="{{ asset($news->getThumbUrl('xs')) }}" /></div>
+                @if($thumbUrl)
+                    <div class="image-preview"><img src="{{ asset($thumbUrl) }}" /></div>
                     <div class="image-removal">{!! Form::checkbox('remove_image', $news->id, null) !!} remove existing image</div>
                 @endif
             </div>

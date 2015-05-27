@@ -11,6 +11,7 @@ use App\Models\Seo;
 use Redirect;
 use Auth;
 use App;
+use MediaLibrary;
 
 
 class NewsController extends Controller {
@@ -71,11 +72,14 @@ class NewsController extends Controller {
 			App::abort(403, 'Access denied');
 
 		$input = $request->all();
+
 		//create the news
 		$news = $this->newsRepos->create($input); 
+
 		//upload the image via service
 		if(isset($input['image']))
-			$this->newsService->uploadImage($news, $input['image']);
+			$this->newsService->uploadImage($news, $input['image']);	
+
 		//add seo polymorphic model
 		$seo = new Seo;
 		$seo->updateFromInput($input);
@@ -96,7 +100,11 @@ class NewsController extends Controller {
 		if(!$this->authUser->can('create-edit-news'))
 			App::abort(403, 'Access denied');
 
-		return view('admin.news.edit', ["news" => $news, "seo" => $news->seo]);
+		//get the small preview thumb if image is uploaded
+		$mediaItems = MediaLibrary::getCollection($news, $news->getMediaCollectionName(), []);
+		(count($mediaItems))?$thumbUrl = $mediaItems[0]->getURL('thumb-xs'):$thumbUrl = null; 
+
+		return view('admin.news.edit', ["news" => $news, "seo" => $news->seo, 'thumbUrl' => $thumbUrl]);
 	}
 
 
@@ -116,11 +124,14 @@ class NewsController extends Controller {
 		//reset the input image
 		if(isset($input['remove_image']) && !isset($input['image']))
 			$input['image'] = null;
+
 		//remove image if checkbox is ticked
 		if(isset($input['remove_image']))
 			$this->newsService->removeImage($news);
+
 		//update the database object
 		$this->newsRepos->update($news->id, $input);
+
 		//upload new picture if any 
 		if(isset($input['image']))
 			$this->newsService->uploadImage($news, $input['image']);
@@ -142,7 +153,6 @@ class NewsController extends Controller {
 		if(!$this->authUser->can('delete-news'))
 			App::abort(403, 'Access denied');
 
-		$this->newsService->removeImage($news);
 		$this->newsRepos->delete($news->id);
 	}
 

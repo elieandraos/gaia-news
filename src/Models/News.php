@@ -2,13 +2,16 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Spatie\MediaLibrary\MediaLibraryModel\MediaLibraryModelInterface;
+use Spatie\MediaLibrary\MediaLibraryModel\MediaLibraryModelTrait;
 
-class News extends Model {
+class News extends Model implements MediaLibraryModelInterface {
 
 	protected $table = 'news';
-	protected $fillable = ['title', 'excerpt', 'description', 'image', 'slug', 'published_at'];
+	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'published_at'];
 	protected $hidden = [];
 
+	use MediaLibraryModelTrait;
 	
 	/**
 	 * Morphing to Seo Model
@@ -32,20 +35,6 @@ class News extends Model {
 
 
 	/**
-	 * image mutator: save the image original name as string 
-	 * @param type $date 
-	 * @return type
-	 */
-	public function setImageAttribute($image)
-	{
-		if($image) 
-			$this->attributes['image'] = $image->getClientOriginalName();
-		else
-			$this->attributes['image'] = null;
-	}
-	
-
-	/**
 	 * returns a friendly date format for pusblished_at attrubute
 	 * @return type
 	 */
@@ -56,14 +45,29 @@ class News extends Model {
 
 
     /**
-     * Returns the image thumb relative url
-     * @param type $size 
+     * Return the media collection name
      * @return type
      */
-    public function getThumbUrl($size = 'xs')
+    public function getMediaCollectionName()
     {
-    	return "uploads/news/".$this->id."/thumb-".$size."-".$this->image;
+    	return "collection-".$this->id;
     }
+
+
+    /**
+     * Image profiles: list of resized images post uploading
+     * @return type
+     */
+	public function getImageProfileProperties()
+	{
+	    return [
+	        'featured' => ['w'=>615, 'h'=>348],
+	        'thumb'    => ['w'=>298, 'h'=>198],
+	        'facebook' => ['w'=>128, 'h'=>128],
+	        'twitter'  => ['w'=>128, 'h'=>128],
+	        'thumb-xs' => ['w'=>60, 'h'=>60]
+	    ];
+	}    
 
 
 }
