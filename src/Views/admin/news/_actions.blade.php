@@ -4,6 +4,11 @@
 	</button>
 </a>
 
+<a href="{{ route('admin.news.translate', [$news->id, $locale]) }}">
+	<button type="button" class="btn btn-info btn-trans btn-xs btn-action " data-toggle="tooltip" data-placement="top" title="Translate News">
+		<i class="fa fa-refresh"></i>
+	</button>
+</a>
 
 
 {!! Form::model($news, ['data-remote' => true, 'data-callback' => 'removeTableRow', 'class' => 'remote-form', 'route' => ['admin.news.delete', $news->id]]) !!}

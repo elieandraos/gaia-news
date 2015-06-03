@@ -21,4 +21,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function()
    Route::post('/news/store', ['as' => 'admin.news.store', 'uses' => 'Gaia\News\NewsController@store']);
    Route::post('/news/{news}/update', ['as' => 'admin.news.update', 'uses' => 'Gaia\News\NewsController@update']);
    Route::post('/news/{news}/delete', ['as' => 'admin.news.delete', 'uses' => 'Gaia\News\NewsController@destroy']);
+   Route::get('/news/{news}/translate/{locale}', ['as' => 'admin.news.translate', 'uses' => 'Gaia\News\NewsController@translate']);
+   Route::post('/news/{news}/translate/{locale}/store', ['as' => 'admin.news.translate-store', 'uses' => 'Gaia\News\NewsController@translateStore']);
 });

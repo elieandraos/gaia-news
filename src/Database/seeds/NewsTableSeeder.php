@@ -19,7 +19,7 @@ class NewsTableSeeder extends Seeder {
 		$faker = Faker::create();
 		$dates = [ Carbon::now(), Carbon::now()->addDays(4), Carbon::now()->subWeeks(1), Carbon::now()->tomorrow(), Carbon::now()->yesterday(), Carbon::now()->subDays(3) ];
 		
-		for($i=0;$i<15;$i++)
+		for($i=0;$i<5;$i++)
 		{
 			$title = $faker->sentence();
 			$index = array_rand($dates);

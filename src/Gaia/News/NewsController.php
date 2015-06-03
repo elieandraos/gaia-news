@@ -8,6 +8,7 @@ use Gaia\Repositories\NewsRepositoryInterface;
 use Gaia\Services\NewsService;
 use App\Models\News;
 use App\Models\Seo;
+use App\Models\Locale;
 use Redirect;
 use Auth;
 use App;
@@ -16,7 +17,7 @@ use MediaLibrary;
 
 class NewsController extends Controller {
 
-	protected $newsRepos, $newsService, $authUser;
+	protected $newsRepos, $newsService, $authUser, $locales;
 
 
 	/**
@@ -28,6 +29,10 @@ class NewsController extends Controller {
 		$this->newsRepos   = $newsReposInterface;
 		$this->newsService = $newsService;
 		$this->authUser = Auth::user();
+
+		//localization
+		$this->locales = Locale::where('language', '!=', 'en')->lists('language', 'language');
+		$this->first_locale = array_first($this->locales, function(){return true;});
 	}
 
 
@@ -42,7 +47,7 @@ class NewsController extends Controller {
 			App::abort(403, 'Access denied');
 
 		$news = $this->newsRepos->getAll();
-		return view('admin.news.index', ["news" => $news]);
+		return view('admin.news.index', ["news" => $news, "locale" => $this->first_locale]);
 	}
 
 
@@ -57,7 +62,7 @@ class NewsController extends Controller {
 			App::abort(403, 'Access denied');
 
 		$seo = new Seo;
-		return view('admin.news.create', ['seo' => $seo]);
+		return view('admin.news.create', ['seo' => $seo, 'thumbUrl' => null]);
 	}
 
 
@@ -100,6 +105,8 @@ class NewsController extends Controller {
 		if(!$this->authUser->can('create-edit-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
+		$seo = $news->seo;
+		//App::setLocale('en');
 		//get the small preview thumb if image is uploaded
 		$mediaItems = MediaLibrary::getCollection($news, $news->getMediaCollectionName(), []);
 		(count($mediaItems))?$thumbUrl = $mediaItems[0]->getURL('thumb-xs'):$thumbUrl = null; 
@@ -154,6 +161,41 @@ class NewsController extends Controller {
 			App::abort(403, 'Access denied');
 
 		$this->newsRepos->delete($news->id);
+	}
+
+
+	/**
+	 * Translate the translatable fields 
+	 * @param type $news 
+	 * @return type
+	 */
+	public function translate($news, $locale)
+	{
+		App::setLocale($locale);
+
+		if(!$this->authUser->can('delete-news') && !$this->authUser->is('superadmin'))
+			App::abort(403, 'Access denied');
+
+		return view('admin.news.translate', ["news" => $news, 'locales' => $this->locales, 'locale' => $locale]);
+	}
+
+
+	/**
+	 * Save the translated content of the news
+	 * @param type $news 
+	 * @param type $locale 
+	 * @return type
+	 */
+	public function translateStore(NewsRequest $request, $news, $locale)
+	{
+		if(!$this->authUser->can('translate-news') && !$this->authUser->is('superadmin'))
+			App::abort(403, 'Access denied');
+
+		App::setLocale($locale);
+		$input = $request->all();
+		$this->newsRepos->update($news->id, $input);
+		App::setLocale("en");
+		return Redirect::route('admin.news.list');
 	}
 
 }

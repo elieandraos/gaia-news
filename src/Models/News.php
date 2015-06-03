@@ -4,15 +4,19 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Spatie\MediaLibrary\MediaLibraryModel\MediaLibraryModelInterface;
 use Spatie\MediaLibrary\MediaLibraryModel\MediaLibraryModelTrait;
+use Vinkla\Translator\Translatable;
+use Vinkla\Translator\Contracts\Translatable as TranslatableContract;
 
-class News extends Model implements MediaLibraryModelInterface {
+class News extends Model implements MediaLibraryModelInterface, TranslatableContract {
+
+	use MediaLibraryModelTrait, Translatable;
 
 	protected $table = 'news';
 	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'published_at'];
-	protected $hidden = [];
-
-	use MediaLibraryModelTrait;
+	protected $translatedAttributes = ['title', 'excerpt', 'description', 'slug'];
+	protected $translator = 'App\Models\NewsTranslation';
 	
+
 	/**
 	 * Morphing to Seo Model
 	 * @return type

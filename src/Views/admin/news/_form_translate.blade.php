@@ -1,4 +1,14 @@
 <!-- Panel start -->
+
+<div class="row">
+    <div class="col-md-2 col-md-push-10">
+        <div class="form-group" style="text-align:right;margin-right:0">
+            Translating to: {!! Form::select('locale', $locales, $locale, ['class' => 'form-control toggle-language', 'style' => 'width: auto;display:inline']) !!}
+            <input type="hidden" value="{!! route('admin.news.translate', [$news->id, null]) !!}" id="translate-url" />
+        </div>
+    </div>
+</div>
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">Required Info</h3>
@@ -10,28 +20,20 @@
 		<div class="form-group @if($errors->has('title')) has-error @endif">
 			{!! Form::label('title', 'Title', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-3">
-                {!! Form::text('title', (isset($news))?$news->title:null, ['class' => 'form-control slug-target']) !!}
+                {!! Form::text('title', $news->title, ['class' => 'form-control slug-target']) !!}
             </div>
             <div class="col-sm-3">
-                {!! Form::text('slug', (isset($news))?$news->slug:null, ['class' => 'form-control txt-slug', 'placeholder' => 'URL slug']) !!}
+                {!! Form::text('slug', $news->slug, ['class' => 'form-control txt-slug', 'placeholder' => 'URL slug']) !!}
+                {!! Form::hidden('published_at', $news->published_at) !!}
             </div>
         </div>
 
         <div class="form-group @if($errors->has('description')) has-error @endif">
 			{!! Form::label('description', 'Description', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
-                {!! Form::textarea('description', (isset($news))?$news->description:null, ['class' => 'form-control']) !!}
+                {!! Form::textarea('description', $news->description, ['class' => 'form-control']) !!}
             </div>
-        </div>
-		<div class="form-group @if($errors->has('published_at')) has-error @endif">
-			{!! Form::label('published_at', 'Publish Date', ['class' => 'col-sm-3 control-label']) !!}
-            <div class="col-sm-3">
-                <div class="input-group date">
-                  {!! Form::text('published_at', null, ['class' => 'form-control']) !!}
-                  <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                </div>  
-            </div>
-        </div>      
+        </div>  
 	</div>
 </div>
 <!-- Panel end -->
@@ -46,25 +48,13 @@
 		<div class="form-group">
 			{!! Form::label('excerpt', 'Excerpt', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
-                {!! Form::textarea('excerpt', (isset($news))?$news->excerpt:null, ['class' => 'form-control', 'rows' => 3]) !!}
-            </div>
-        </div>
-        <div class="form-group">
-            {!! Form::label('image', 'Image', ['class' => 'col-sm-3 control-label']) !!}
-            <div class="col-sm-6">
-               {!! Form::file('image','',array('id'=>'image','class'=>'form-control')) !!}
-                @if($thumbUrl)
-                    <div class="image-preview"><img src="{{ asset($thumbUrl) }}" /></div>
-                    <div class="image-removal">{!! Form::checkbox('remove_image', $news->id, null) !!} remove existing image</div>
-                @endif
+                {!! Form::textarea('excerpt', $news->excerpt, ['class' => 'form-control', 'rows' => 3]) !!}
             </div>
         </div>
 	</div>
 </div>
 <!-- Panel end -->
 
-
-@include('admin.seo._form')
 
 
 <div class="row">
