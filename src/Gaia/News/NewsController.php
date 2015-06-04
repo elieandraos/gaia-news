@@ -106,7 +106,6 @@ class NewsController extends Controller {
 			App::abort(403, 'Access denied');
 
 		$seo = $news->seo;
-		//App::setLocale('en');
 		//get the small preview thumb if image is uploaded
 		$mediaItems = MediaLibrary::getCollection($news, $news->getMediaCollectionName(), []);
 		(count($mediaItems))?$thumbUrl = $mediaItems[0]->getURL('thumb-xs'):$thumbUrl = null; 
@@ -171,12 +170,13 @@ class NewsController extends Controller {
 	 */
 	public function translate($news, $locale)
 	{
-		App::setLocale($locale);
-
-		if(!$this->authUser->can('delete-news') && !$this->authUser->is('superadmin'))
+		if(!$this->authUser->can('translate-news') && !$this->authUser->is('superadmin'))
 			App::abort(403, 'Access denied');
 
-		return view('admin.news.translate', ["news" => $news, 'locales' => $this->locales, 'locale' => $locale]);
+		App::setLocale($locale);
+		$seo = $news->seo;
+
+		return view('admin.news.translate', ["news" => $news, "seo" => $news->seo, 'locales' => $this->locales, 'locale' => $locale]);
 	}
 
 
@@ -194,7 +194,9 @@ class NewsController extends Controller {
 		App::setLocale($locale);
 		$input = $request->all();
 		$this->newsRepos->update($news->id, $input);
+		$news->seo->updateFromInput($input);
 		App::setLocale("en");
+		
 		return Redirect::route('admin.news.list');
 	}
 
