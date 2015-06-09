@@ -13,7 +13,8 @@
     "minimum-stability": "stable",
     "require": {
         "eandraos/gaia-ui": "1.1.x",
-        "eandraos/gaia-seo": "1.0.x"
+        "eandraos/gaia-seo": "1.0.x",
+        "eandraos/gaia-categories": "1.1.x"
     },
     "autoload": {
         "psr-0": {

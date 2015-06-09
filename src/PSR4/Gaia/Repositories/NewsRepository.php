@@ -47,6 +47,9 @@ class NewsRepository extends DbRepository implements NewsRepositoryInterface
 	public function update($id, $input)
 	{
 		$news = $this->find($id);
+		if(!isset($input['is_featured']))
+			$input['is_featured'] = 0;
+		
 		return $news->update($input); 
 	}
 

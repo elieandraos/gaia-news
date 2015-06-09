@@ -9,15 +9,17 @@ use Gaia\Services\NewsService;
 use App\Models\News;
 use App\Models\Seo;
 use App\Models\Locale;
+use App\Models\Category;
 use Redirect;
 use Auth;
 use App;
 use MediaLibrary;
+use Config;
 
 
 class NewsController extends Controller {
 
-	protected $newsRepos, $newsService, $authUser, $locales;
+	protected $newsRepos, $newsService, $authUser, $locales, $categories;
 
 
 	/**
@@ -33,6 +35,12 @@ class NewsController extends Controller {
 		//localization
 		$this->locales = Locale::where('language', '!=', 'en')->lists('language', 'language');
 		$this->first_locale = array_first($this->locales, function(){return true;});
+
+		//news category root 
+		$categoryRootId = Config::get('app.newsCategoryRootId');
+		$categories = Category::find($categoryRootId)->descendants()->get();
+		foreach($categories as $category)
+			$this->categories[$category->id] = $category->title;
 	}
 
 
@@ -62,7 +70,7 @@ class NewsController extends Controller {
 			App::abort(403, 'Access denied');
 
 		$seo = new Seo;
-		return view('admin.news.create', ['seo' => $seo, 'thumbUrl' => null]);
+		return view('admin.news.create', ['seo' => $seo, 'thumbUrl' => null, "categories" => $this->categories]);
 	}
 
 
@@ -110,7 +118,7 @@ class NewsController extends Controller {
 		$mediaItems = MediaLibrary::getCollection($news, $news->getMediaCollectionName(), []);
 		(count($mediaItems))?$thumbUrl = $mediaItems[0]->getURL('thumb-xs'):$thumbUrl = null; 
 
-		return view('admin.news.edit', ["news" => $news, "seo" => $news->seo, 'thumbUrl' => $thumbUrl]);
+		return view('admin.news.edit', ["news" => $news, "seo" => $news->seo, 'thumbUrl' => $thumbUrl, "categories" => $this->categories]);
 	}
 
 

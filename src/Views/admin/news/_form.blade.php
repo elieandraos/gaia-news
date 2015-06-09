@@ -31,6 +31,17 @@
                   <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>  
             </div>
+        </div>
+       <div class="form-group @if($errors->has('category_id')) has-error @endif">
+            {!! Form::label('category_id', 'Category', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::select(
+                    'category_id', 
+                    ['0' => 'Select category'] + $categories, 
+                    isset($news)?$news->category_id:null, 
+                    ['class' => 'form-control', 'id' => 'category_id']
+                ) !!}    
+            </div>
         </div>      
 	</div>
 </div>
@@ -47,6 +58,16 @@
 			{!! Form::label('excerpt', 'Excerpt', ['class' => 'col-sm-3 control-label']) !!}
             <div class="col-sm-6">
                 {!! Form::textarea('excerpt', (isset($news))?$news->excerpt:null, ['class' => 'form-control', 'rows' => 3]) !!}
+            </div>
+        </div>
+         <div class="form-group">
+            {!! Form::label('is_featured', 'Is Featured', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::checkbox(
+                    'is_featured', 
+                    1, 
+                    (isset($news->is_featured))?true:false)
+                !!} 
             </div>
         </div>
         <div class="form-group">

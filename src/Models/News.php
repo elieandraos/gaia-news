@@ -12,10 +12,19 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 	use MediaLibraryModelTrait, Translatable;
 
 	protected $table = 'news';
-	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'published_at'];
+	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'published_at', 'category_id', 'is_featured'];
 	protected $translatedAttributes = ['title', 'excerpt', 'description', 'slug'];
 	protected $translator = 'App\Models\NewsTranslation';
 	
+	
+	/**********************
+	 * ELOQUANT RELATIONS *
+	 **********************/
+	
+	public function category()
+	{
+		return $this->belongsTo('App\Models\Category');
+	}
 
 	/**
 	 * Morphing to Seo Model
@@ -26,6 +35,10 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 	    return $this->morphOne('App\Models\Seo', 'seoable');
 	}
 
+
+	/******************
+	 * DATE FUNCTIONS *
+	 ******************/
 
 	/**
 	 * published_at mutator: parse the date before saving the model 
@@ -57,6 +70,10 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
     	return "collection-".$this->id;
     }
 
+
+    /*****************
+	 * MEDIA LINRARY *
+	 *****************/
 
     /**
      * Image profiles: list of resized images post uploading

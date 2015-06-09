@@ -30,6 +30,7 @@
 				  <thead>
 				    <tr>
 				      <th>Title</th>
+				      <th>Category</th>
 				      <th>Publish Date</th>
 				      <th>Action</th>
 				    </tr>
@@ -38,6 +39,7 @@
 				    @foreach($news as $n)
 						<tr>
 							<td>{{ $n->title }}</td>
+							<td>{{ $n->category->title }}</td>
 							<td>{{ $n->getHumanPublishedAt() }}</td>
 							<td>
 								@include('admin.news._actions', ["news" => $n])

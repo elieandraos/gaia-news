@@ -25,6 +25,7 @@
             <div class="col-sm-3">
                 {!! Form::text('slug', $news->slug, ['class' => 'form-control txt-slug', 'placeholder' => 'URL slug']) !!}
                 {!! Form::hidden('published_at', $news->published_at) !!}
+                {!! Form::hidden('category_id', $news->category_id) !!}
             </div>
         </div>
 

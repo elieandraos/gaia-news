@@ -26,7 +26,8 @@ class NewsRequest extends Request {
 			'title' => 'required|min:3',
 			'description' => 'required',
 			'published_at' => 'required',
-			'slug' => 'required'
+			'slug' => 'required',
+			'category_id' => 'required|exists:categories,id'
 		];
 	}
 
