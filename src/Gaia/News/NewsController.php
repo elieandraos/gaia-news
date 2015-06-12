@@ -15,6 +15,7 @@ use Auth;
 use App;
 use MediaLibrary;
 use Config;
+use Flash;
 
 
 class NewsController extends Controller {
@@ -98,6 +99,7 @@ class NewsController extends Controller {
 		$seo->updateFromInput($input);
 		$news->seo()->save($seo);
 
+		Flash::success('News was created successfully.');
 		return Redirect::route('admin.news.list');
 	}
 
@@ -152,6 +154,7 @@ class NewsController extends Controller {
 
 		$news->seo->updateFromInput($input);
 
+		Flash::success('News was updated successfully.');
 		return Redirect::route('admin.news.list');
 	}
 
@@ -205,6 +208,7 @@ class NewsController extends Controller {
 		$news->seo->updateFromInput($input);
 		App::setLocale("en");
 		
+		Flash::success('News was translated successfully.');
 		return Redirect::route('admin.news.list');
 	}
 
