@@ -88,7 +88,23 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 	        'twitter'  => ['w'=>128, 'h'=>128],
 	        'thumb-xs' => ['w'=>60, 'h'=>60]
 	    ];
-	}    
+	}  
+
+
+
+	/**
+	 * Returns the root category id configured for the news
+	 * @return type
+	 */
+	public static function getConfiguredRootCategory()
+	{
+		$obj = CategoryModules::where('is_news', '=', 1)->first();
+		
+		if(!$obj)
+			return null;
+
+		return $obj->category_id;
+	}  
 
 
 }

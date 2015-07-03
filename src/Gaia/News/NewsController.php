@@ -5,17 +5,21 @@ use Illuminate\Routing\Controller;
 
 use Gaia\News\NewsRequest;
 use Gaia\Repositories\NewsRepositoryInterface;
+use Gaia\Repositories\PostTypeRepositoryInterface;
 use Gaia\Services\NewsService;
+//Models
 use App\Models\News;
 use App\Models\Seo;
 use App\Models\Locale;
 use App\Models\Category;
+//Facades
 use Redirect;
 use Auth;
 use App;
 use MediaLibrary;
 use Config;
 use Flash;
+use View;
 
 
 class NewsController extends Controller {
@@ -27,7 +31,7 @@ class NewsController extends Controller {
 	 * Constructor: inject the news repository class to be used in all methods
 	 * @return type
 	 */
-	public function __construct(NewsRepositoryInterface $newsReposInterface, NewsService $newsService )
+	public function __construct(NewsRepositoryInterface $newsReposInterface, NewsService $newsService, PostTypeRepositoryInterface $postTypeRepositoryInterface)
 	{
 		$this->newsRepos   = $newsReposInterface;
 		$this->newsService = $newsService;
@@ -38,10 +42,14 @@ class NewsController extends Controller {
 		$this->first_locale = array_first($this->locales, function(){return true;});
 
 		//news category root 
-		$categoryRootId = Config::get('app.newsCategoryRootId');
+		$categoryRootId = News::getConfiguredRootCategory();
 		$categories = Category::find($categoryRootId)->descendants()->get();
 		foreach($categories as $category)
 			$this->categories[$category->id] = $category->title;
+
+		//share the post type submenu to the layout
+		$this->postTypeRepos = $postTypeRepositoryInterface;
+		View::share('postTypesSubmenu', $this->postTypeRepos->renderMenu());
 	}
 
 
