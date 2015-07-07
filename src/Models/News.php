@@ -12,7 +12,7 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 	use MediaLibraryModelTrait, Translatable;
 
 	protected $table = 'news';
-	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'published_at', 'category_id', 'is_featured'];
+	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'youtube_url', 'published_at', 'category_id', 'is_featured'];
 	protected $translatedAttributes = ['title', 'excerpt', 'description', 'slug'];
 	protected $translator = 'App\Models\NewsTranslation';
 	

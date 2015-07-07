@@ -80,6 +80,13 @@
                 @endif
             </div>
         </div>
+        <div class="form-group @if($errors->has('youtube_url')) has-error @endif">
+            {!! Form::label('youtube_url', 'Youtube Url', ['class' => 'col-sm-3 control-label']) !!}
+            <div class="col-sm-6">
+                {!! Form::text('youtube_url', (isset($post))?$post->youtube_url:null, ['class' => 'form-control slug-target']) !!}
+                <div class="image-removal">If both the image and video url are present, the image will be clickable and plays the video.</div>
+            </div>
+        </div>
 	</div>
 </div>
 <!-- Panel end -->
