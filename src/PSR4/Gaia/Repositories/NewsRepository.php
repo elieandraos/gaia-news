@@ -5,15 +5,18 @@ use App\Models\News;
 class NewsRepository extends DbRepository implements NewsRepositoryInterface 
 {
 	
-	protected $limit = 12;
+	protected $limit = 15;
 
 	/**
 	 * Returns all the news sorted by published_at
 	 * @return NewsCollection
 	 */
-	public function getAll()
+	public function getAll($limit = null)
 	{	
-		return News::latest('published_at')->paginate($this->limit);
+		if(!$limit)
+			$limit = $this->limit;
+
+		return News::latest('published_at')->paginate($limit);
 	}
 
 
