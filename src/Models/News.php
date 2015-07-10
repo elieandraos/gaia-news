@@ -13,7 +13,7 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 
 	protected $table = 'news';
 	protected $fillable = ['title', 'excerpt', 'description', 'slug', 'youtube_url', 'published_at', 'category_id', 'is_featured'];
-	protected $translatedAttributes = ['title', 'excerpt', 'description', 'slug'];
+	protected $translatedAttributes = ['title', 'excerpt', 'description'];
 	protected $translator = 'App\Models\NewsTranslation';
 	
 	
@@ -62,6 +62,16 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 
 
     /**
+	 * returns a friendly date format for pusblished_at attrubute
+	 * @return type
+	 */
+	public function getReadablePublishedAt()
+    {
+        return Carbon::parse($this->published_at)->format('M d,Y');
+    }
+
+
+    /**
      * Return the media collection name
      * @return type
      */
@@ -82,10 +92,15 @@ class News extends Model implements MediaLibraryModelInterface, TranslatableCont
 	public function getImageProfileProperties()
 	{
 	    return [
-	        'featured' => ['w'=>615, 'h'=>348],
-	        'thumb'    => ['w'=>298, 'h'=>198],
+	    	//front end thumbs
+	        'featured' 		  => ['w'=>670, 'h'=>382],
+	        'thumb-large'     => ['w'=>570, 'h'=>325],
+	        'thumb-medium'    => ['w'=>270, 'h'=>192],
+	        'thumb-small'     => ['w'=>170, 'h'=>120],
+	        //social media sharing thumbs
 	        'facebook' => ['w'=>128, 'h'=>128],
 	        'twitter'  => ['w'=>128, 'h'=>128],
+	        //backend
 	        'thumb-xs' => ['w'=>60, 'h'=>60]
 	    ];
 	}  
